@@ -1,8 +1,9 @@
-# React + Vite
+TODO
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Allow multiple different file uploads
+Allow for glb file uploads
+Storing key information about models
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Visually a mvp would be a drag and drop viewer, displaying a list of the all objects in the scene
+

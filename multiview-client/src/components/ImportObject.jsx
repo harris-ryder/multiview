@@ -1,12 +1,27 @@
 import React from 'react';
-import { MeshBasicMaterial } from 'three';
+import { MeshStandardMaterial } from 'three';
+
+import { useLayoutEffect } from 'react'
 
 
+//<mesh scale={[1, 1, 1]} geometry={geometry} material={material} />
 export const ImportObject = ({ geometry }) => {
-  const material = new MeshBasicMaterial({ color: 0xff0000 });
+  const material = new MeshStandardMaterial({ color: 0xff0000 });
+
+  useLayoutEffect(() => {
+    geometry.traverse((child) => {
+      if (child.isMesh) {
+        console.log("mesh", child)
+        child.material = material
+      }
+    })
+  }, [geometry])
+
+  console.log("import geometryect", geometry)
   return (
     <>
-      <mesh scale={[1, 1, 1]} geometry={geometry.data} material={material} />
+
+      <primitive object={geometry} material={material} />
     </>
   );
 };
