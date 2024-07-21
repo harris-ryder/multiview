@@ -1,11 +1,8 @@
 import React from 'react';
 import { MeshStandardMaterial } from 'three';
-
 import { useLayoutEffect } from 'react'
 
-
-//<mesh scale={[1, 1, 1]} geometry={geometry} material={material} />
-export const ImportObject = ({ geometry }) => {
+export const MeshOBJ = ({ geometry }) => {
   const material = new MeshStandardMaterial({ color: 0xff0000 });
 
   useLayoutEffect(() => {
@@ -17,10 +14,8 @@ export const ImportObject = ({ geometry }) => {
     })
   }, [geometry])
 
-  console.log("import geometryect", geometry)
   return (
     <>
-
       <primitive object={geometry} material={material} />
     </>
   );

@@ -6,8 +6,9 @@
 import * as THREE from 'three';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-
-
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
 // First step to loading meshes: Function housing all other functions
 async function returnArrayOfGeometries(event) {
@@ -20,7 +21,7 @@ async function returnArrayOfGeometries(event) {
     const name = file.name.split('.')[0]
     const type = file.name.split('.')[1].toLowerCase()
     const geometry = await loadGeometry(file, type, name)
-
+    console.log(geometry)
     items.push({ name, type, file: file, geometry: geometry })
   }
   console.log("items", items)
@@ -63,7 +64,6 @@ function loadGeometry(file, type, name) {
           try {
             const geometry = new OBJLoader().parse(event.target.result);
             geometry.name = name
-            console.log("working!", geometry)
             resolve(geometry);
           } catch (error) {
             reject(error);
@@ -76,6 +76,43 @@ function loadGeometry(file, type, name) {
 
         reader.readAsText(file)
         break;
+
+      case 'fbx':
+        reader.onload = (event) => {
+          try {
+            const geometry = new FBXLoader().parse(event.target.result)
+            resolve(geometry)
+          } catch (error) {
+            reject(error)
+          }
+
+        }
+        reader.readAsArrayBuffer(file)
+        break
+
+      case 'glb':
+
+        reader.onload = (event) => {
+          try {
+            const dracoLoader = new DRACOLoader()
+            dracoLoader.setDecoderPath('/draco/')
+
+            const gltfLoader = new GLTFLoader()
+            gltfLoader.setDRACOLoader(dracoLoader)
+
+            gltfLoader.parse(event.target.result, '', (result) => {
+              let scene = result.scene
+              resolve(scene)
+            })
+
+          } catch (error) {
+            reject(error)
+          }
+
+        }
+        reader.readAsArrayBuffer(file)
+
+        break
 
       default:
         reject(new Error("Unsupported file type"));
