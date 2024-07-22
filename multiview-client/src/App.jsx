@@ -1,3 +1,4 @@
+
 import { useEffect, Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Stage, OrbitControls } from '@react-three/drei';
@@ -32,6 +33,9 @@ function App() {
           arr.push(<MeshFBX key={index} geometry={object.geometry} />)
           break
         case 'glb':
+          arr.push(<MeshGLTF key={index} scene={object.geometry} />)
+          break
+        case 'gltf':
           arr.push(<MeshGLTF key={index} scene={object.geometry} />)
         default:
           break;
