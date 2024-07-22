@@ -1,8 +1,3 @@
-// Receive Files
-// Split them up
-// Create separate geometries
-// return geometries
-
 import * as THREE from 'three';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
@@ -10,16 +5,19 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
-// First step to loading meshes: Function housing all other functions
+
+// returnArrayofGeometries takes input files, converts them to bufferArrays -> geometries/scenes
+// this function returns an array (items) of objects containing file name, type, original file and geometry data
+// Can handle STL, OBJ, FBX, GLTF
 async function returnArrayOfGeometries(event) {
 
 
   let items = [] // Array of objs {file name, file type, plain file, geometry data}
   let files = event.target.files
-  let buffers = new Map()
+  let buffers = new Map() // Map of bin files { "filename" => arrayBuffer}
 
-
-  // Function to read file and return a promise
+  // STAGE 1 : POPULATE BUFFERS
+  // Function to convert file to Bufferarray and add to buffers map
   const readFileAsArrayBuffer = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -32,35 +30,32 @@ async function returnArrayOfGeometries(event) {
     });
   };
 
-  // Create an array of promises
+  // Reads through files that contain bin files and sends them to readFileAsArrayBuffer (function above)
   const readPromises = Array.from(files)
     .filter(file => file.name.endsWith('.bin'))
     .map(readFileAsArrayBuffer);
 
-  // Wait for all promises to complete
+  // Wait for all promises to complete (function above)
   await Promise.all(readPromises);
 
 
-  console.log("Buffy ", buffers);
 
 
 
-
+  // STAGE 2 : CONVERT FILES TO GEOMETRY AND RETURN THEM
   for (const file of files) {
     const name = file.name.split('.')[0]
     const type = file.name.split('.')[1].toLowerCase()
     if (!(type === "gltf" || type === "glb" || type === "stl" || type === "obj" || type === "fbx")) continue
     const geometry = await loadGeometry(file, type, name, buffers)
-    console.log(geometry)
     items.push({ name, type, file: file, geometry: geometry })
   }
-  console.log("items", items)
   return items
 
 }
 
 
-// Go through list of arrayBuffer objects and generate geometries and include in array
+// Takes file, finds file type then converts to bufferArray then Loader -> Geometry data is then returned
 function loadGeometry(file, type, name, buffers) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -162,7 +157,7 @@ function loadGeometry(file, type, name, buffers) {
 }
 
 
-
+// Specific function for 'gltf' as it receives a separate bin file, the threejs loadingManager needs modifying to accept it
 const loadGLTF = (file, buffers) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
