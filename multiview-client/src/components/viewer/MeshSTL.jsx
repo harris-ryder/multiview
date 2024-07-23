@@ -7,11 +7,11 @@ import { TransformControls } from '@react-three/drei';
 export const MeshSTL = ({ geometry }) => {
   const material = new MeshStandardMaterial({ color: 0xff0000 });
 
+
+  console.log(geometry)
   return (
     <>
-      <TransformControls>
-        <mesh scale={[1, 1, 1]} geometry={geometry} material={material} />
-      </TransformControls>
+      <mesh scale={[1, 1, 1]} geometry={geometry} material={material} />
 
     </>
   );

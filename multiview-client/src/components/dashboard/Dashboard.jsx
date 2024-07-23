@@ -7,11 +7,11 @@ import { Modal } from './Modal';
 
 export function Dashboard() {
 
-
+  const [editorActive, setEditorActive] = useState(false)
 
   return (
     <>
-      <Modal />
+      {!editorActive && (<Modal setEditorActive={setEditorActive} />)}
     </>
   );
 }

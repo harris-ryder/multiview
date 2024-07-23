@@ -2,14 +2,14 @@
 import { useEffect, Suspense, useState, useContext } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Stage, OrbitControls } from '@react-three/drei';
-import { MeshOBJ } from './MeshOBJ';
 import { MeshSTL } from './MeshSTL';
-import { MeshFBX } from './MeshFBX';
 import { MeshGLTF } from './MeshGLTF';
 import { useScene } from '../../context/SceneContext'
-
-
+import { useControls } from 'leva'
 export function Viewer({ children }) {
+
+
+  const controls = useControls({ position: -2 })
 
   return (
     <>
@@ -22,6 +22,8 @@ export function Viewer({ children }) {
           >
             {children}
           </Stage>
+
+          <axesHelper args={[200, 200, 200]} />
           <OrbitControls />
         </Canvas>
 

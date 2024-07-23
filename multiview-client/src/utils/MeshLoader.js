@@ -50,10 +50,10 @@ async function returnArrayOfGeometries(event) {
     const geometry = await loadGeometry(file, type, name, buffers)
     items.push({ name, type, file: file, geometry: geometry })
   }
+
   return items
 
 }
-
 
 // Takes file, finds file type then converts to bufferArray then Loader -> Geometry data is then returned
 function loadGeometry(file, type, name, buffers) {
@@ -127,6 +127,7 @@ function loadGeometry(file, type, name, buffers) {
 
             gltfLoader.parse(event.target.result, '', (result) => {
               let scene = result.scene
+              console.log("glb result: ", result)
               resolve(scene)
             })
 
@@ -142,10 +143,10 @@ function loadGeometry(file, type, name, buffers) {
       case 'gltf':
 
         loadGLTF(file, buffers).then((scene) => {
-          console.log('Loaded GLTF scene:', scene);
+          //console.log('Loaded GLTF scene:', scene);
           resolve(scene)
         }).catch((error) => {
-          console.error('Error loading GLTF:', error);
+          //console.error('Error loading GLTF:', error);
           reject(error)
         });
         break
@@ -174,9 +175,7 @@ const loadGLTF = (file, buffers) => {
 
         // Set URL modifier to intercept resource requests and provide Blob URLs
         loadingManager.setURLModifier((url) => {
-          console.log("Desired url", url)
           const buffer = buffers.get(url);
-          console.log("retrieved buffer", buffer)
           if (buffer) {
             const resourceBlob = new Blob([buffer], { type: 'application/octet-stream' });
             return URL.createObjectURL(resourceBlob);
@@ -186,6 +185,7 @@ const loadGLTF = (file, buffers) => {
 
         gltfLoader.parse(event.target.result, '', (result) => {
           let scene = result.scene;
+          console.log("Pure ", result)
           resolve(scene);
         });
 

@@ -1,22 +1,30 @@
-import React from 'react';
+import React, { useState, useLayoutEffect } from 'react';
+import * as THREE from 'three';
 import { MeshStandardMaterial } from 'three';
-import { useLayoutEffect } from 'react'
 
 export const MeshGLTF = ({ scene }) => {
-  const material = new MeshStandardMaterial({ color: 0xff0000 });
+  const [mesh, setMesh] = useState(null);
 
   useLayoutEffect(() => {
-    scene.traverse((child) => {
-      if (child.isMesh) {
-        console.log("mesh", child)
-        //child.material = material
-      }
-    })
-  }, [scene])
 
-  return (
-    <>
-      <primitive object={scene} />
-    </>
-  );
+    if (scene && scene.isMesh) {
+      const worldPosition = new THREE.Vector3();
+      const worldRotation = new THREE.Quaternion();
+      const worldScale = new THREE.Vector3();
+
+      scene.updateMatrixWorld(true);
+      scene.getWorldPosition(worldPosition);
+      scene.getWorldQuaternion(worldRotation);
+      scene.getWorldScale(worldScale);
+
+      const newMesh = new THREE.Mesh(scene.geometry, scene.material);
+      newMesh.position.copy(worldPosition);
+      newMesh.quaternion.copy(worldRotation);
+      newMesh.scale.copy(worldScale);
+
+      setMesh(newMesh);
+    }
+  }, [scene]);
+
+  return mesh ? <primitive object={mesh} /> : null;
 };
