@@ -1,7 +1,7 @@
-import { Viewer } from './components/Viewer';
-import { Dashboard } from './components/Dashboard';
+import { Viewer } from './components/viewer/Viewer';
+import { Dashboard } from './components/dashboard/Dashboard';
 import { SceneProvider } from './context/SceneContext';
-
+import { SceneModels } from './components/viewer/SceneModels';
 
 function App() {
 
@@ -9,7 +9,9 @@ function App() {
     <>
       <SceneProvider>
         <Dashboard />
-        <Viewer />
+        <Viewer>
+          <SceneModels />
+        </Viewer>
       </SceneProvider>
     </>
   );

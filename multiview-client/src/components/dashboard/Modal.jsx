@@ -1,10 +1,10 @@
+
 import { useEffect, Suspense, useState, useContext } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Stage, OrbitControls } from '@react-three/drei';
-import { useScene } from '../context/SceneContext';
+import { useScene } from '../../context/SceneContext';
 
-
-export function Dashboard() {
+export function Modal() {
 
 
   const { handleFile } = useScene()
@@ -14,9 +14,8 @@ export function Dashboard() {
   }
 
   return (
-    <div className='html-container'>
+    <div className='modal'>
       <input type="file" id="model-upload" name="model" onChange={fileUpload} multiple="multiple" />
     </div>
   );
 }
-

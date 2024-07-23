@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { MeshStandardMaterial } from 'three';
+import { TransformControls } from '@react-three/drei';
 
 
 export const MeshSTL = ({ geometry }) => {
@@ -8,7 +9,10 @@ export const MeshSTL = ({ geometry }) => {
 
   return (
     <>
-      <mesh scale={[1, 1, 1]} geometry={geometry} material={material} />
+      <TransformControls>
+        <mesh scale={[1, 1, 1]} geometry={geometry} material={material} />
+      </TransformControls>
+
     </>
   );
 };
